@@ -5,11 +5,7 @@ var player = {
 }
 
 function addMoney(money) {
-	player.money = Math.round((player.money + money)*100)/100;
-	if(money > 0){
-		player.totalMoneyEarned = Math.round((player.totalMoneyEarned + money)*100)/100;
-	}
-	if(player.money < 0) player.money = 0;
+	player.totalMoneyEarned = player.money + money;
 }
 
 $(document).ready(function(){
