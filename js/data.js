@@ -11,5 +11,7 @@ $(document).ready(function(){
     $("#addmoneyBtn").click(function(){
         addMoney(player.moneyPerClick);
         document.getElementById('moneyDisplay').innerHTML = player.totalMoneyEarned;
-    });    
+    });
 });
+
+test change
