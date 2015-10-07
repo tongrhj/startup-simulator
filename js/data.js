@@ -13,5 +13,3 @@ $(document).ready(function(){
         document.getElementById('moneyDisplay').innerHTML = player.totalMoneyEarned;
     });
 });
-
-test change
