@@ -1,22 +1,3 @@
-// //Creates the player
-// var player = {
-//     moneyPerClick: 1,
-//     moneyPerSecond: 0,
-//     totalMoneyEarned: 0,
-// }
-//
-// function addMoney(money) {
-// 	player.totalMoneyEarned += money;
-//   if(player.totalMoneyEarned < 0) player.totalMoneyEarned = 0;
-// }
-//
-// $(document).ready(function(){
-//     $("#addmoneyBtn").click(function(){
-//         addMoney(player.moneyPerClick);
-//         document.getElementById('moneyDisplay').innerHTML = player.totalMoneyEarned;
-//     });
-// });
-
 var Game = function() {
 
   this.monies = 0;
@@ -37,6 +18,7 @@ Game.prototype.onFrame = function() {
   this.monies += this.moneyRatePerSecond*delta;
   //document.title = ""+Math.round(this.monies);
   document.getElementById('moneyDisplay').innerHTML = Math.round(this.monies);
+  console.log(Math.round(this.monies));
     // Request next frame.
     requestAnimFrame(this.onFrame);
 };
