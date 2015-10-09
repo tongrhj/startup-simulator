@@ -16,8 +16,8 @@ Game.prototype.onFrame = function() {
   // Add Money per second per delta
   player.money += player.moneyPerSecond*delta;
   //document.title = ""+Math.round(this.monies);
-  $('moneyDisplay').innerHTML = Math.round(this.monies);
-  console.log(Math.round(this.monies));
+  $('moneyDisplay').innerHTML = Math.round((player.money*100)/100);
+  console.log(Math.round((player.money*100)/100));
     // Request next frame.
     requestAnimFrame(this.onFrame);
 };
