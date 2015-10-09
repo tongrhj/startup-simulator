@@ -17,7 +17,7 @@ Game.prototype.onFrame = function() {
   player.money += player.moneyPerSecond*delta;
   //document.title = ""+Math.round(this.monies);
   $('moneyDisplay').innerHTML = Math.round((player.money*100)/100);
-  console.log(Math.round((player.money*100)/100));
+  console.log(Math.round((player.money*100)/100););
     // Request next frame.
     requestAnimFrame(this.onFrame);
 };
@@ -42,8 +42,6 @@ var gameInstance = new Game();
 function addMoney(money) {
   player.money += money;
   if (player.money < 0) player.money = 0;
-  var moneytoDisplay = Math.round((player.money*100)/100);
-  $('moneyDisplay').innerHTML = Math.round(moneytoDisplay);
 }
 
 //Initalise on game start: addmoneyBtn, etc.
