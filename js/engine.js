@@ -5,6 +5,9 @@ var Money = (function() {
         player.money += moneytoadd;
         if (player.money < 0) player.money = 0;
       },
+      update: function(){
+        $('#moneyDisplay').html(Math.round((player.money*100)/100));
+      },
       log: function(){
         console.log(player.money)
       }
@@ -13,7 +16,6 @@ var Money = (function() {
 
 //Initalise on game start: addmoneyBtn, etc.
 $(document).ready(function(){
-  
   $("#addmoneyBtn").click(function(){
     Money.add(player.moneyPerClick);
   })
@@ -35,8 +37,9 @@ Game.prototype.onFrame = function() {
 
   // Add Money per second per delta
   Money.add(player.moneyPerSecond*delta);
+  Money.update();
   //document.title = ""+Math.round(this.monies);
-  $('#moneyDisplay').innerHTML = Math.round((player.money*100)/100);
+
     // Request next frame.
     requestAnimFrame(this.onFrame);
 };
