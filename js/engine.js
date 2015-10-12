@@ -1,5 +1,25 @@
-var Game = function() {
+//This is a Module pattern of Javascript, should alleviate possibility of variable conflicts
+var Money = (function() {
+  return {
+      add: function(moneytoadd){
+        player.money += moneytoadd;
+        if (player.money < 0) player.money = 0;
+      },
+      log: function(){
+        console.log(player.money)
+      }
+  }
+})();
 
+//Initalise on game start: addmoneyBtn, etc.
+$(document).ready(function(){
+  
+  $("#addmoneyBtn").click(function(){
+    Money.add(player.moneyPerClick);
+  })
+});
+
+var Game = function() {
   // Cache a bound onFrame since we need it each frame.
     this.onFrame = this.onFrame.bind(this);
 
@@ -14,15 +34,12 @@ Game.prototype.onFrame = function() {
     this.lastFrame = now;
 
   // Add Money per second per delta
-  player.money += player.moneyPerSecond*delta;
+  Money.add(player.moneyPerSecond*delta);
   //document.title = ""+Math.round(this.monies);
   $('#moneyDisplay').innerHTML = Math.round((player.money*100)/100);
-  console.log(Math.round((player.money*100)/100);
     // Request next frame.
     requestAnimFrame(this.onFrame);
 };
-
-
 /**
    * Cross browser RequestAnimationFrame
    */
@@ -38,16 +55,3 @@ Game.prototype.onFrame = function() {
   })();
 
 var gameInstance = new Game();
-
-function addMoney(money) {
-  player.money += money;
-  if (player.money < 0) player.money = 0;
-}
-
-//Initalise on game start: addmoneyBtn, etc.
-$(document).ready(function(){
-  $("#addmoneyBtn").click(function(){
-    addMoney(player.moneyPerClick);
-  })
-
-});
