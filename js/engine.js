@@ -1,15 +1,15 @@
 //This is a Module pattern of Javascript, should alleviate possibility of variable conflicts
 var Money = (function() {
   return {
-      add: function(moneytoadd){
-        player.money += moneytoadd;
+      add: function(moneyToAdd){
+        player.money += moneyToAdd;
         if (player.money < 0) player.money = 0;
       },
       update: function(){
         $('#moneyDisplay').html(Math.round((player.money*100)/100));
       },
       log: function(){
-        console.log(player.money)
+        console.log(player.money);
       }
   }
 })();
@@ -18,6 +18,9 @@ var Money = (function() {
 $(document).ready(function(){
   $("#addmoneyBtn").click(function(){
     Money.add(player.moneyPerClick);
+  }),
+  $("#addusersBtn").click(function(){
+    Users.add(player.usersPerClick);
   })
 });
 
@@ -35,9 +38,11 @@ Game.prototype.onFrame = function() {
         delta = now - this.lastFrame;
     this.lastFrame = now;
 
-  // Add Money per second per delta
+  // Add Money/Users per second per delta and update money/users display
   Money.add(player.moneyPerSecond*delta);
   Money.update();
+  Users.churn(userschurnPerSecond*delta);
+  Users.update();
   //document.title = ""+Math.round(this.monies);
     // Request next frame.
     requestAnimFrame(this.onFrame);
