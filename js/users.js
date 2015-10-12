@@ -12,7 +12,7 @@ var Users = (function() {
       },
       churn: function(usersToSubtract){
         player.users -= usersToSubtract;
-        if (player.users < 0) player.money = 0;
+        if (player.users < 0) player.users = 0;
       },
       log: function(){
         console.log(player.users);
