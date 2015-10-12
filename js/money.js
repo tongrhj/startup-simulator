@@ -17,7 +17,7 @@ var Money = (function() {
         console.log(player.money);
       },
       setburnrate: function(){
-        player.moneyburnPerSecond = (player.users/2);
+        player.moneyburnPerSecond = (player.users/10);
       }
   }
 })();
