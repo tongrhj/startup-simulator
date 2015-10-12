@@ -16,24 +16,3 @@ var player = {
   }
 
 };
-
-var teams = {
-  Product: {
-    Features: {
-      'timeline': {
-        button: null,
-        maximum: 1,
-        availableMsg: _('builder says she can make traps to catch any creatures might still be alive out there'),
-        buildMsg: _('more traps to catch more creatures'),
-        maxMsg: _("more traps won't help now"),
-        type: 'building',
-        cost: function() {
-          var n = player.features["timeline"];
-          return {
-            'money': 10 + (n*10)
-          };
-        }
-      }
-    }
-  }
-};
