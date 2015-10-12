@@ -4,9 +4,11 @@ var upgrades = (function() {
   //Enables/Disables Feature Purchase Buttons
     updateBtns: function () {
       for (i = 0; i < upgradesToDisplay.length; i++) {
-        $('tr#featuresDisplay').append("<tr><button class='buyfeaturesBtn'>"+i+"</button></tr>");
+        $('td#featuresDisplay').append("<tr><button class='btn btn-warning'>"+upgradesToDisplay[i]+"</button></tr>");
       };
     } // ,
   };
 
 })();
+
+upgrades.updateBtns();
