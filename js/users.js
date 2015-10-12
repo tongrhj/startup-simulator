@@ -1,3 +1,5 @@
+// Module that handles Users
+
 var Users = (function() {
   return {
       add: function(usersToAdd){

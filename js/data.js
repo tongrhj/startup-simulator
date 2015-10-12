@@ -1,3 +1,5 @@
+// Contains all data to be relied on
+
 var player = {
   money: 0,
   moneyPerSecond: 0,
