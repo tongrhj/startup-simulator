@@ -8,11 +8,6 @@ var player = {
   users: 1,
   usersPerSecond: 0.1,
   usersPerClick: 1,
-  userschurnPerSecond: 0.05,
-
-  features: {
-    timeline: 0,
-    cart: 0
-  }
+  userschurnPerSecond: 0.05
 
 };

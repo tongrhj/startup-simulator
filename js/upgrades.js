@@ -1,5 +1,6 @@
+var upgradesToDisplay = ["timeline", "referrals"];
+
 var upgrades = (function() {
-  var upgradesToDisplay = ["timeline", "referrals"];
   return {
   //Enables/Disables Feature Purchase Buttons
     updateBtns: function () {

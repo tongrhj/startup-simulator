@@ -7,7 +7,6 @@ $(document).ready(function(){
     Users.add(player.usersPerClick);
   })
 });
-
 var Game = function() {
   // Cache a bound onFrame since we need it each frame.
     this.onFrame = this.onFrame.bind(this);
