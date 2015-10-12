@@ -39,11 +39,6 @@ Game.prototype.onFrame = function() {
   Money.add(player.moneyPerSecond*delta);
   Money.update();
   //document.title = ""+Math.round(this.monies);
-<<<<<<< HEAD
-
-=======
-  $('#moneyDisplay').html(Math.round((player.money*100)/100));
->>>>>>> origin/master
     // Request next frame.
     requestAnimFrame(this.onFrame);
 };
