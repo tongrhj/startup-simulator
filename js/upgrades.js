@@ -3,12 +3,10 @@ var upgrades = (function() {
   return {
   //Enables/Disables Feature Purchase Buttons
     updateBtns: function () {
-    upgradesToDisplay.forEach(function(elem) {
-      $('tr#featuresDisplay').append("<tr><button class='buyfeaturesBtn'>"+elem+"</button></tr>")
-      });
-    }
-
-
+      for (i = 0; i < upgradesToDisplay.length; i++) {
+        $('tr#featuresDisplay').append("<tr><button class='buyfeaturesBtn'>"+i+"</button></tr>");
+      };
+    } // ,
   };
 
 })();

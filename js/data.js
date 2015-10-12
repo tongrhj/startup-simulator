@@ -21,7 +21,6 @@ var teams = {
   Product: {
     Features: {
       'timeline': {
-        name: _('timeline'),
         button: null,
         maximum: 1,
         availableMsg: _('builder says she can make traps to catch any creatures might still be alive out there'),
