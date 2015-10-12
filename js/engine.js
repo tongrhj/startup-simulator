@@ -22,11 +22,15 @@ Game.prototype.onFrame = function() {
         delta = now - this.lastFrame;
     this.lastFrame = now;
 
-  // Add Money/Users per second per delta and update money/users display
+  // Calculate net money and user after accounting for burn and churn and update respective displays
   Money.add(player.moneyPerSecond*delta);
+  Money.setburnrate();
+  Money.subtract(player.moneyburnPerSecond*delta);
+  Users.subtract(player.userschurnPerSecond*delta);
+
   Money.update();
-  Users.churn(player.userschurnPerSecond*delta);
   Users.update();
+
   //document.title = ""+Math.round(this.monies);
     // Request next frame.
     requestAnimFrame(this.onFrame);

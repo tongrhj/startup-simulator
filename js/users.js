@@ -10,7 +10,7 @@ var Users = (function() {
       update: function(){
         $('#usersDisplay').html(Math.round((player.users*100)/100));
       },
-      churn: function(usersToSubtract){
+      subtract: function(usersToSubtract){
         player.users -= usersToSubtract;
         if (player.users < 0) player.users = 0;
       },
