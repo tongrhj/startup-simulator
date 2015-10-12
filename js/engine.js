@@ -25,7 +25,7 @@ Game.prototype.onFrame = function() {
   // Add Money/Users per second per delta and update money/users display
   Money.add(player.moneyPerSecond*delta);
   Money.update();
-  Users.churn(userschurnPerSecond*delta);
+  Users.churn(player.userschurnPerSecond*delta);
   Users.update();
   //document.title = ""+Math.round(this.monies);
     // Request next frame.
