@@ -9,5 +9,14 @@ var player = {
   usersPerSecond: 0.1,
   usersPerClick: 1,
   userschurnPerSecond: 0.05
-
 };
+
+var upgradesToDisplay = ["timeline", "referrals"];
+
+var upgrades = {
+  Features: {
+    
+
+  } // ,
+
+}
