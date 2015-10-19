@@ -64,10 +64,10 @@
         function init()
         {
           //create Game() instance
-        	game=new Game();
+        	game=new Game(10);
 
         	//add attributes
-        	game.addAttribute("Money",0).track("Money","#addmoneyBtn", function(value) { return value.toFixed(0); });;
+        	game.addAttribute("Money",1000).track("Money","#moneyDisplay", function(value) { return value.toFixed(0); });
 
         	game.play(play);
 
