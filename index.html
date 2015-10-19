@@ -17,7 +17,7 @@
     <h1>GAME</h1>
     <div id="clickContainer">
       <button id="addmoneyBtn" class="btn btn-primary">CLICK ME</button>
-      <button id="addusersBtn" class="btn btn-success">Or CLICK ME</button>
+      <button id="addusersBtn" class="btn btn-danger">Users cost $2</button>
     </div>
 
   	<div id="moneyTable">
@@ -28,7 +28,7 @@
 	    </tr>
       <tr>
 				<td>Users:</td>
-				<td id="usersDisplay">0</td>
+				<td id="userDisplay">0</td>
 	    </tr>
       <tr>
         <tr><td><h2>TEAMS</h2></td></tr>
@@ -52,10 +52,63 @@
     <!-- Bootstrap Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <!-- Game Engine -->
-    <script src="js/data.js"></script>
-    <script src="js/users.js"></script>
-    <script src="js/money.js"></script>
-    <script src="js/upgrades.js"></script>
-    <script src="js/engine.js"></script>
+    <!-- IncrementalJS Framework Game Engine -->
+    <script src="js/incrementalObject.js"></script>
+
+    <!-- My Game JS Look I'm a Coder Growth Hacker-->
+    <script>
+    //Variable Declarations and initializations
+        var game;
+
+    //the init() function initializes or sets up our game
+        function init()
+        {
+          //create Game() instance
+        	game=new Game();
+
+        	//add attributes
+        	game.addAttribute("Money",0).track("Money","#addmoneyBtn", function(value) { return value.toFixed(0); });;
+
+        	game.play(play);
+
+          //add clickers
+
+          //addmoneeyBtn now increases money per second by 2 at cost of $10
+          game.addClicker("#addmoneyBtn", function() {
+          	var playermoney=game.getAttribute("Money");
+          	var cost=10;
+          	var increase=2;
+
+          	if (playermoney>=cost)
+          	{
+          		//we can buy
+          		playermoney-=cost;
+          		game.setAttribute("Money",playermoney);
+          		var mps=game.getAttribute("moneyPerSecond");
+          		mps+=increase;
+              game.addClickerText("Money per Second +2");//adds clicker/particle text - still under works!
+          		game.setAttribute("moneyPerSecond",mps);
+          	}
+
+
+
+
+        });
+
+          //the play() function contains essential game code
+        	function play()
+        	{
+            //here we see another way to get/update attributes more quickly
+          	var g=game.attributes;
+          	g["Money"]+=g["moneyPerSecond"]/game.getFPS();
+          	//divide by FPS because we have to take into account the Frames Per Second when adding anything per Second,
+
+
+        	}
+
+        	//this checks if the window has loaded - includes the document, and all objects/elements in it - and executes the function init() when it has
+        	window.onload=init;
+        }
+    </script>
   </body>
 </html>
