@@ -1,61 +1,94 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>The Growth Hacker Game</title>
+<meta charset="utf-8">
+<style>
 
-    <!-- Bootstrap -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+.bar {
+  fill: steelblue;
+}
 
-  </head>
-  <body>
-    <h1>GAME</h1>
-    <div id="clickContainer">
-      <button id="addmoneyBtn" class="btn btn-primary">CLICK ME</button>
-      <button id="addusersBtn" class="btn btn-success">Or CLICK ME</button>
-    </div>
+.bar:hover {
+  fill: brown;
+}
 
-  	<div id="moneyTable">
-  		<table>
-			<tr>
-				<td>Money:</td>
-				<td id="moneyDisplay">0</td>
-	    </tr>
-      <tr>
-				<td>Users:</td>
-				<td id="usersDisplay">0</td>
-	    </tr>
-      <tr>
-        <tr><td><h2>TEAMS</h2></td></tr>
-        <tr><td><h3>PRODUCT</h3>
-        <tr><td id="featuresDisplay"></td></tr>
-      </tr>
+.axis {
+  font: 10px sans-serif;
+}
 
-	    </table>
-	  </div>
-    <br/><br/>
-    <button>Regular Button</button>
-    <button class="btn btn-primary">Primary Button</button>
-    <button class="btn btn-info">Info Button</button>
-    <button class="btn btn-success">Success Button</button>
-    <button class="btn btn-warning">Warning Button</button>
-    <button class="btn btn-danger">Danger Button</button>
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
 
-    <!-- SCRIPTS -->
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <!-- Bootstrap Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-    <!-- Game Engine -->
-    <script src="js/data.js"></script>
-    <script src="js/users.js"></script>
-    <script src="js/money.js"></script>
-    <script src="js/upgrades.js"></script>
-    <script src="js/engine.js"></script>
-  </body>
-</html>
+.x.axis path {
+  display: none;
+}
+
+</style>
+<body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+<script>
+
+var margin = {top: 20, right: 20, bottom: 30, left: 40},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+var x = d3.scale.ordinal()
+    .rangeRoundBands([0, width], .1);
+
+var y = d3.scale.linear()
+    .range([height, 0]);
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left")
+    .ticks(10, "%");
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+d3.tsv("data.tsv", type, function(error, data) {
+  if (error) throw error;
+
+  x.domain(data.map(function(d) { return d.letter; }));
+  y.domain([0, d3.max(data, function(d) { return d.frequency; })]);
+
+  svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis);
+
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+    .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("Frequency");
+
+  svg.selectAll(".bar")
+      .data(data)
+    .enter().append("rect")
+      .attr("class", "bar")
+      .attr("x", function(d) { return x(d.letter); })
+      .attr("width", x.rangeBand())
+      .attr("y", function(d) { return y(d.frequency); })
+      .attr("height", function(d) { return height - y(d.frequency); });
+});
+
+function type(d) {
+  d.frequency = +d.frequency;
+  return d;
+}
+
+</script>
