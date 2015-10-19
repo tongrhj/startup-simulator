@@ -1,97 +1,172 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>The Growth Hacker Game</title>
 
-<html>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
 
-	<head>
+  </head>
+  <body>
+    <h1>GAME</h1>
+    <div id="clickContainer">
+      <button id="addmoneyBtn" class="btn btn-primary">CLICK ME</button>
+      <button id="addusersBtn" class="btn btn-danger">Users cost $2</button>
+    </div>
 
-		<title>Hello IncrementalJS</title>
-		<script src="js/incrementalObject.js"></script>
-		<script src="http://aldo111.github.io/incremental-game-engine-js/js/jquery.js"></script>
+  	<div id="moneyTable">
+  		<table>
+			<tr>
+				<td>Money:</td>
+				<td id="moneyDisplay">0</td>
+	    </tr>
+      <tr>
+				<td>Users:</td>
+				<td id="userDisplay">0</td>
+	    </tr>
+      <tr>
+        <tr><td><h2>TEAMS</h2></td></tr>
+        <tr><td><h3>PRODUCT</h3>
+        <tr><td id="featuresDisplay"></td></tr>
+      </tr>
 
-		<!--Our Javascript Code-->
-		<script type="text/javascript">
+	    </table>
+	  </div>
 
-			//Variable Declarations & Initializations
-			var game;
+    <div id="log">
+
+    </div>
+
+    <br/><br/>
+    <button>Regular Button</button>
+    <button class="btn btn-primary">Primary Button</button>
+    <button class="btn btn-info">Info Button</button>
+    <button class="btn btn-success">Success Button</button>
+    <button class="btn btn-warning">Warning Button</button>
+    <button class="btn btn-danger">Danger Button</button>
+
+    <!-- SCRIPTS -->
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- Bootstrap Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <!-- Game Engine -->
+    <!-- IncrementalJS Framework Game Engine -->
+    <script src="js/incrementalObject.js"></script>
+
+    <!-- My Game JS Look I'm a Coder Growth Hacker-->
+    <script>
+    //Variable Declarations and initializations
+    var game;
+
+    //the init() function initializes or sets up our game
+    function init()
+        {
+          //create Game() instance
+        	game=new Game(10);
+
+        	//add attributes
+        	game.addAttribute("Money",1000).track("Money","#moneyDisplay", function(value) { return value.toFixed(0); });
+          game.addAttribute("moneyPerSecond",0.1);
+          game.addAttribute("day",1);
+
+          //Create one object to hold all my variables to avoid polluting global namespace
+          game.log_array=[];
+          game.log_line=0;
+
+        	game.play(play);
+
+          //add clickers
+
+          //addmoneeyBtn now increases money per second by 2 at cost of $10
+          game.addClicker("#addmoneyBtn", function() {
+          	var playermoney=game.getAttribute("Money");
+          	var cost=10;
+          	var increase=2;
+
+          	if (playermoney>=cost)
+          	{
+          		//we can buy
+          		playermoney-=cost;
+          		game.setAttribute("Money",playermoney);
+          		var mps=game.getAttribute("moneyPerSecond");
+          		mps+=increase;
+              game.addClickerText("Money per Second +2");
+              log("You added an intern to your sales force!");
+              game.setAttribute("moneyPerSecond",mps);
+          	}
 
 
-			//the init() function initializes or sets up our game
-			function init()
-			{
-				//create Game() instance
-				game=new Game(30);
 
-				//add attributes
-				game.addAttribute("Points",0).track("Points","#points", function(value) { return value.toFixed(0); });
-				game.addAttribute("PointsPerSecond",0,"#points_per_second");
+        });
 
-				//play
-				game.play(play);
+        //Start the game with story line 1
+        log("You're bored at work.'");
 
-				//add clickers
-				game.addClicker("#earn",function() {
-					game.attributes.Points+=2;
-					game.addClickerText("+2");//adds clicker/particle text - still under works!
-				});
+        }
 
-				game.addClicker("#getSome", function() {
-					//this function also shows another way to access attributes
-					var p=game.getAttribute("Points");
-					var cost=10;
-					var increase=2;
+      //create a log of player actions and story
+      function log(text) { //logs text in the text box
+				//Have to use a fixed number of statements because otherwise, extreme lag follows.
 
-					if (p>=cost)
+
+        var day=Math.floor(game.getAttribute("day"));
+				if (game.log_line>=9)
+				{
+					game.log_line=9;
+					//move everything down by one to make space for this new one
+					var temp="";
+					for (var j=0;j<game.log_array.length-1;j++)
 					{
-						//we can buy
-						p-=cost;
-						game.setAttribute("Points",p);
-						var pps=game.getAttribute("PointsPerSecond");
-						pps+=increase;
-						game.setAttribute("PointsPerSecond",pps);
+						game.log_array[j]=game.log_array[j+1];
+
 					}
 
+				}
+				game.log_array[game.log_line]="<dark>[Day "+day+"]</dark> "+text+"<hr>";
+				game.log_line++;
 
+				var text="";
+				for (var j=game.log_array.length-1;j>=0;j--)
+				{
 
+					text+=game.log_array[j];
 
-				});
+				}
+				$("#log").html(text);
+				//update upwards
+//				var s=document.getElementById("log");
 
+//				s.innerHTML="<dark>[Day "+day+"]</dark> "+text+"<hr>"+s.innerHTML;
 
-
-
+				//--The following javascript code updates downwards
+					//document.getElementById("log").innerHTML+="<br>"+document.getElementById("log").scrollHeight;
+					//document.getElementById("log").scrollTop=document.getElementById("log").scrollHeight;
 			}
 
-			//the play() function contains essential game code
-			function play()
-			{
-
-				//here we see another way to get/update attributes more quickly
-				var g=game.attributes;
-				g["Points"]+=g["PointsPerSecond"]/game.getFPS();
-				//divide by FPS because we have to take into account the Frames Per Second when adding anything per Second, because this play() loop is execute game.getFPS() times per second!
 
 
-			}
+        //the play() function contains essential game code
+        function play()
+        {
+          //here we see another way to get/update attributes more quickly
+          var g=game.attributes;
+          g["Money"]+=g["moneyPerSecond"]/game.getFPS();
+          //divide by FPS because we have to take into account the Frames Per Second when adding anything per Second,
 
-			//this checks if the window has loaded - includes the document, and all objects/elements in it - and executes the function init() when it has
-			window.onload=init;
+        }
 
-		</script>
+        $(document).ready(function() {
 
+  				init(); //run initialization code
 
-	</head>
-
-	<body>
-
-		Points: <span id="points"></span>
-		<input type='button' id='earn' value='Earn Points'>
-
-		<hr>
-
-		Points Per Second: <span id="points_per_second"></span>
-		<input type='button' id='getSome' value='Get Some!'>
-
-
-
-	</body>
-
+  			});
+    </script>
+  </body>
 </html>
