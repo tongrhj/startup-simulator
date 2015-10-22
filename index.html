@@ -37,7 +37,7 @@
 
     .jumbotron {
       color:#fff;
-      background: #354458 url("blueprofile.png") no-repeat right center;
+      background: #354458;
       padding-left:15px;
       padding-right:15px;
     }
@@ -67,6 +67,10 @@
         <div class="header clearfix">
           <h1>The Startup Simulator <small>by Jared Tong</small></h1>
         </div>
+        <div class="panel panel-default">
+          <div class="panel-heading"><h2>Timeline</h2></div>
+          <div id="log"></div>
+        </div>
         <div class="jumbotron">
           <h1>Your Stats</h1>
           <table>
@@ -86,10 +90,7 @@
             <button id="addmoneyBtn" class="btn btn-primary">CLICK ME</button>
             <button id="addusersBtn" class="btn btn-danger">Users cost $2</button>
           </div>
-        </div>
-        <div class="panel panel-default">
-          <div class="panel-heading"><h2>Timeline</h2></div>
-          <div id="log"></div>
+          <ul id="upgrades_list"></ul>
         </div>
         <div class="footer">
           Copyright <img src="dinosaur.svg" alt="dinosaur icon" width="30px" height="30px"> Dinosaurs Are Awesome 2015, <em>Singapore</em>
@@ -105,11 +106,159 @@
     <!-- IncrementalJS Framework Game Engine -->
     <script src="js/incrementalObject.js"></script>
     <script>
-    //Variable Declarations and initializations
-    var game;
+      //Variable Declarations and initializations
+      var game;
 
-    //the init() function initializes or sets up our game
-    function init()
+      //create the object template for Upgrades
+      function upgradeTemplate(name,description,required,effects,required_stats,log_text) //effects -> effect_on : effect_value ...eg. health: +50 ..etc -> affects ALL camp participants for simplicity
+      {
+        //additionally -> all effects values are added at the beginning of each day
+        //required is an array -> stores names of upgrades required so far to build this
+        //required_stats -> object of stats required
+        if (!game.isDefined(required_stats))
+          required_stats={Money:100};
+
+        return {name:name,description:description,required_upgrades:required,required_stats:required_stats,effects:effects,count:0,log_text:log_text,stop:false};
+      };
+
+      function displayRequiredStats(req_stats)
+			{
+				//get all the required stats in text
+				keys=Object.keys(req_stats);
+				req_text="";
+				for (var j in keys)
+					req_text+=keys[j]+": "+req_stats[keys[j]]+" ";
+				return req_text;
+			};
+
+			function displayUpgrade(u)
+			{
+					var x="";
+					//get all the effects in text
+					var effects=u.getAttribute("effects");
+					var keys=Object.keys(effects);
+					var eftext="<b>Effects</b>: ";
+					for (var j in keys)
+						eftext+=keys[j]+": "+effects[keys[j]]+" ";
+
+					//get all the required stats in text
+					var req_stats=u.getAttribute("required_stats");
+					var req_text=displayRequiredStats(req_stats);
+
+					x="<li id='"+u.getName()+"_up'><b class='upgrade_button' id='"+u.getName()+"_upgrade'>"+u.getAttribute("name")+"</b><br><i>"+u.getAttribute("description")+"</i><br><sup><b>Count:</b> <i id='count_"+u.getName()+"_upgrade'>"+u.getAttribute("count")+"</i><br><b>Required:</b> <i id='required_"+u.getName()+"'>"+req_text+"</i><br>"+eftext+"</sup></li><hr style='opacity:0.2;width:50%;margin:0 auto;'>";
+
+					if (!game.checkFlag("unlocked_"+u.getName()))
+					{
+						$("#upgrades_list").prepend(x);//add the element only once into the list
+						u.track("count","#count_"+u.getName()+"_upgrade");//track the count
+						u.track("required_stats","#required_"+u.getName(),displayRequiredStats);//track the required stat changes
+						game.addFlag("unlocked_"+u.getName());
+						game.addClicker("#"+u.getName()+"_upgrade",useUpgrade,u.getName());
+					};
+			};
+
+			function displayUpgrades()
+			{
+				var all="";	//upgrades list
+				var u=game.getSet("AVAILABLE_UPGRADES").getEntities();
+				for (var i in u)
+				{
+					displayUpgrade(u[i]);
+				};
+			};
+
+      function useUpgrade(u_id)
+      {
+        if (!game.getSet("AVAILABLE_UPGRADES").hasEntity(u_id))
+          return false;
+
+        //now we can do stuff for this upgrade
+        var g=game.getSet("AVAILABLE_UPGRADES").getEntity(u_id);
+        var flag=true;
+        var changes=[]; //store the stat changes in this array, check if all stats are correct
+        //check if our stats are at the correct level
+        var req_stats=g.getAttribute("required_stats");
+        var keys=Object.keys(req_stats);
+        for (var j in keys)
+        {
+          var attr=game.getAttribute(keys[j]);
+          if (req_stats[keys[j]]<=attr)
+          {
+            changes[keys[j]]=attr-req_stats[keys[j]];//deduct the necessary amount;
+          } else {
+              flag=false;
+              break;
+            };
+        };
+
+        if (flag) //all stats are in order so let's process the changes
+        {
+          keys=Object.keys(changes);
+          for (var j in keys)
+          {
+            game.setAttribute(keys[j],changes[keys[j]]);
+          }
+
+          var count=g.getAttribute("count")+1;
+          g.setAttribute("count",count);
+          log(g.getAttribute("log_text"));//log its action text
+
+          //change its style so that the user knows it's unlocked
+          $("#"+g.getName()+"_upgrade").css({"background-color":"#0af"});
+
+          keys=Object.keys(req_stats);
+
+          //let's update the cost
+          for (var j in keys)
+          {
+            var newCost=Math.floor(req_stats[keys[j]]*Math.pow(1.3,count));
+            req_stats[keys[j]]=newCost;
+          }
+          g.setAttribute("required_stats",req_stats);
+        };
+      };
+
+      function processUpgrades()
+      {
+        //increase day time
+        game.setAttribute("day",game.getAttribute("day")+0.25);
+        var g=game.getSet("AVAILABLE_UPGRADES").getEntities();
+        var x=0;
+        for (var j in g)//var i=0;i<keys_g.length;i++)
+        {
+          x++;
+          console.log("Checking : "+x+". "+g[j].getName());
+          var e=g[j];
+          if (e.getAttribute("stop"))
+          {
+            console.log("^----->Continued");
+            continue;
+          };
+          if (e.getAttribute("count")<=0)
+          {
+            console.log("^----->Continued Count");
+            continue;
+          };
+          //process effects
+          var effects=e.getAttribute("effects");
+          for (var j in effects)
+          {
+            console.log("Processing "+j);
+            var count=e.getAttribute("count");
+            var name=j;
+            var value=effects[j]*count;
+            if (game.hasAttribute(j))
+            {
+              game.setAttribute(j,game.getAttribute(j)+value);
+              if (game.getAttribute(j) < 0) game.setAttribute(j,0);
+            };
+            console.log("Processed::" + e.getName()+":: Effect:"+j+"->"+value);
+          };
+        };
+      };
+
+      //the init() function initializes or sets up our game
+      function init()
         {
           //create Game() instance
         	game=new Game(10);
@@ -119,11 +268,18 @@
           game.addAttribute("moneyPerSecond",0.1);
           game.addAttribute("day",1);
 
+
+          //add upgrade entity sets
+          game.addSet("UPGRADES")
+          game.getSet("UPGRADES").addEntity("BuildProduct", upgradeTemplate("Build a Product", "You're about to change the world.",[], {Money:100},{Money:0},"<yellow>You built a product.</yellow>"));
+
+          game.addSet("AVAILABLE_UPGRADES").addEntity(game.getSet("UPGRADES").getEntity("BuildProduct")).track("required_stats","#required_BuildProduct",displayRequiredStats);
+
           //Create one object to hold all my variables to avoid polluting global namespace
           game.log_array=[];
           game.log_line=0;
 
-        	game.play(play);
+        	game.play(gameCode);
 
           //add clickers
 
@@ -183,18 +339,52 @@
 					//document.getElementById("log").scrollTop=document.getElementById("log").scrollHeight;
 			}
 
-        //the play() function contains essential game code
-        function play()
-        {
-          //here we see another way to get/update attributes more quickly
-          var g=game.attributes;
-          g["Money"]+=g["moneyPerSecond"]/game.getFPS();
-          //divide by FPS because we have to take into account the Frames Per Second when adding anything per Second,
-        }
+      //the gameCode() function contains essential game code
+      function gameCode()
+      {
+        //first we need to keep checking for any unlocked upgrades
+				var u=game.getSet("UPGRADES").getEntities();
+				for (var i in u)
+				{
+					var name=u[i].getName();
 
-        $(document).ready(function() {
-  				init(); //run initialization code
-  			});
+					//skip if we've already unlocked it
+					if (game.getSet("AVAILABLE_UPGRADES").hasEntity(name))
+						continue;
+
+					//check the required upgrades for this upgrade to be unlocked
+					var flag=true;
+					var ar=u[i].getAttribute("required_upgrades");
+					//checking the array of required upgrades and seeing if the user has them in available_upgrades
+					for (var j in ar)
+					{
+						//either user doesn't have the upgrade unlocked yet or it's unlocked but it hasn't been used yet
+						if ( !game.getSet("AVAILABLE_UPGRADES").hasEntity(ar[j]) || (game.getSet("AVAILABLE_UPGRADES").hasEntity(ar[j]) && game.getSet("AVAILABLE_UPGRADES").getEntity(ar[j]).getAttribute("count")==0) )
+						{
+							flag=false;
+							break;
+						};
+					};
+
+					if (flag) //unlock the upgrade
+					{
+						game.getSet("AVAILABLE_UPGRADES").addEntity(u[i]).track("required_stats","#required_"+name,displayRequiredStats);
+						console.log("Added "+name);
+						displayUpgrade(game.getSet("AVAILABLE_UPGRADES").getEntity(name));
+					};
+				};
+
+        //Add moneyPerSecond to Money over game's FPS
+        var g=game.attributes;
+        g["Money"]+=g["moneyPerSecond"]/game.getFPS();
+
+        displayUpgrades();
+
+      }; // End of gameCode
+
+      $(document).ready(function() {
+				init(); //run initialization code
+			});
     </script>
   </body>
 </html>
