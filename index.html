@@ -6,51 +6,95 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>The Growth Hacker Game</title>
+    <title>The Startup Simulator Game</title>
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
-
   </head>
-  <body>
-    <h1>GAME</h1>
-    <div id="clickContainer">
-      <button id="addmoneyBtn" class="btn btn-primary">CLICK ME</button>
-      <button id="addusersBtn" class="btn btn-danger">Users cost $2</button>
-    </div>
 
-  	<div id="moneyTable">
-  		<table>
-			<tr>
-				<td>Money:</td>
-				<td id="moneyDisplay">0</td>
-	    </tr>
-      <tr>
-				<td>Users:</td>
-				<td id="userDisplay">0</td>
-	    </tr>
-      <tr>
-        <tr><td><h2>TEAMS</h2></td></tr>
-        <tr><td><h3>PRODUCT</h3>
-        <tr><td id="featuresDisplay"></td></tr>
-      </tr>
+  <style>
+    body {
+      padding-top: 20px;
+      padding-bottom: 20px;
+    }
 
-	    </table>
-	  </div>
+    /* Set max width of container to 730px */
+    @media (min-width: 768px) {
+      .container {
+        max-width: 730px;
+      }
+    }
 
-    <div id="log">
+    /* Add space between header and jumbotron */
+    .header {
+      margin-bottom: 30px;
+    }
 
-    </div>
+    /*Remove bootstrap's default margins for header h1 */
+    .header h1 {margin:0px;line-height:40px;}
+    /*Align subtext subtitle with header h1 */
+    .header h1 small {vertical-align: middle;}
 
-    <br/><br/>
-    <button>Regular Button</button>
-    <button class="btn btn-primary">Primary Button</button>
-    <button class="btn btn-info">Info Button</button>
-    <button class="btn btn-success">Success Button</button>
-    <button class="btn btn-warning">Warning Button</button>
-    <button class="btn btn-danger">Danger Button</button>
+    .jumbotron {
+      color:#fff;
+      background: #354458 url("blueprofile.png") no-repeat right center;
+      padding-left:15px;
+      padding-right:15px;
+    }
+
+    /* Change jumbotrons default link style */
+    .jumbotron p a {
+      color:#eb7260;
+      transition: all 0.2s;
+    }
+    .jumbotron p a:hover  {
+      color: #fff;
+      text-decoration: none;
+      border-bottom: 1px solid #eb7260;
+    }
+
+    /* Create a footer! */
+    .footer {
+      padding-top: 19px;
+      color: #777;
+      border-top: 1px solid #e5e5e5;
+    }
+
+    </style>
+
+    <body>
+      <div class="container">
+        <div class="header clearfix">
+          <h1>The Startup Simulator <small>by Jared Tong</small></h1>
+        </div>
+        <div class="jumbotron">
+          <h1>Your Stats</h1>
+          <table>
+      			<tr>
+      				<td>Money in bank:</td>
+      				<td id="moneyDisplay">0</td>
+      	    </tr>
+            <tr>
+      				<td>Users:</td>
+      				<td id="userDisplay">0</td>
+      	    </tr>
+          </table>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading"><h2>Admin Dashboard</h2></div>
+          <div id="clickContainer">
+            <button id="addmoneyBtn" class="btn btn-primary">CLICK ME</button>
+            <button id="addusersBtn" class="btn btn-danger">Users cost $2</button>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading"><h2>Timeline</h2></div>
+          <div id="log"></div>
+        </div>
+        <div class="footer">
+          Copyright <img src="dinosaur.svg" alt="dinosaur icon" width="30px" height="30px"> Dinosaurs Are Awesome 2015, <em>Singapore</em>
+        </div>
+	  </div> <!-- End of container div-->
 
     <!-- SCRIPTS -->
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -60,8 +104,6 @@
     <!-- Game Engine -->
     <!-- IncrementalJS Framework Game Engine -->
     <script src="js/incrementalObject.js"></script>
-
-    <!-- My Game JS Look I'm a Coder Growth Hacker-->
     <script>
     //Variable Declarations and initializations
     var game;
@@ -102,9 +144,6 @@
               log("You added an intern to your sales force!");
               game.setAttribute("moneyPerSecond",mps);
           	}
-
-
-
         });
 
         //Start the game with story line 1
@@ -115,30 +154,23 @@
       //create a log of player actions and story
       function log(text) { //logs text in the text box
 				//Have to use a fixed number of statements because otherwise, extreme lag follows.
-
-
         var day=Math.floor(game.getAttribute("day"));
-				if (game.log_line>=9)
+				if (game.log_line>=4)
 				{
-					game.log_line=9;
+					game.log_line=4;
 					//move everything down by one to make space for this new one
 					var temp="";
 					for (var j=0;j<game.log_array.length-1;j++)
 					{
 						game.log_array[j]=game.log_array[j+1];
-
 					}
-
 				}
 				game.log_array[game.log_line]="<dark>[Day "+day+"]</dark> "+text+"<hr>";
 				game.log_line++;
-
 				var text="";
 				for (var j=game.log_array.length-1;j>=0;j--)
 				{
-
 					text+=game.log_array[j];
-
 				}
 				$("#log").html(text);
 				//update upwards
@@ -151,8 +183,6 @@
 					//document.getElementById("log").scrollTop=document.getElementById("log").scrollHeight;
 			}
 
-
-
         //the play() function contains essential game code
         function play()
         {
@@ -160,13 +190,10 @@
           var g=game.attributes;
           g["Money"]+=g["moneyPerSecond"]/game.getFPS();
           //divide by FPS because we have to take into account the Frames Per Second when adding anything per Second,
-
         }
 
         $(document).ready(function() {
-
   				init(); //run initialization code
-
   			});
     </script>
   </body>
