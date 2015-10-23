@@ -271,8 +271,8 @@
 
           //add upgrade entity sets
           game.addSet("UPGRADES")
-          game.getSet("UPGRADES").addEntity("BuildProduct", upgradeTemplate("Build a Product", "You're about to change the world.",[], {Money:100},{Money:100},"You built a product."));
-          game.getSet("UPGRADES").addEntity("BuildLanding", DefaultUpgrade("Build Landing Page", "Everything needs a website.",["BuildProduct"], {Money:-1},{Money:100},"You built a landing page."));
+          game.getSet("UPGRADES").addEntity("BuildProduct", upgradeTemplate("Build a Product", "You're about to change the world.",[], {Money:-20},{Money:100},"You built a product."));
+          game.getSet("UPGRADES").addEntity("BuildLanding", upgradeTemplate("Build Landing Page", "Everything needs a website.",["BuildProduct"], {Money:-10},{Money:100},"You built a landing page."));
 
           game.addSet("AVAILABLE_UPGRADES").addEntity(game.getSet("UPGRADES").getEntity("BuildProduct")).track("required_stats","#required_BuildProduct",displayRequiredStats);
 
