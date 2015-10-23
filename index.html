@@ -316,9 +316,9 @@
       function log(text) { //logs text in the text box
 				//Have to use a fixed number of statements because otherwise, extreme lag follows.
         var day=Math.floor(game.getAttribute("day"));
-				if (game.log_line>=4)
+				if (game.log_line>=1)
 				{
-					game.log_line=4;
+					game.log_line=1;
 					//move everything down by one to make space for this new one
 					var temp="";
 					for (var j=0;j<game.log_array.length-1;j++)
