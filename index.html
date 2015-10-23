@@ -145,7 +145,7 @@
 					var req_stats=u.getAttribute("required_stats");
 					var req_text=displayRequiredStats(req_stats);
 
-					x="<li id='"+u.getName()+"_up'><b class='upgrade_button' id='"+u.getName()+"_upgrade'>"+u.getAttribute("name")+"</b><br><i>"+u.getAttribute("description")+"</i><br><sup><b>Count:</b> <i id='count_"+u.getName()+"_upgrade'>"+u.getAttribute("count")+"</i><br><b>Required:</b> <i id='required_"+u.getName()+"'>"+req_text+"</i><br>"+eftext+"</sup></li><hr style='opacity:0.2;width:50%;margin:0 auto;'>";
+					x="<li id='"+u.getName()+"_up'><button class='upgrade_button' id='"+u.getName()+"_upgrade'>"+u.getAttribute("name")+"</button><br><i>"+u.getAttribute("description")+"</i><br><sup><b>Count:</b> <i id='count_"+u.getName()+"_upgrade'>"+u.getAttribute("count")+"</i><br><b>Required:</b> <i id='required_"+u.getName()+"'>"+req_text+"</i><br>"+eftext+"</sup></li>";
 
 					if (!game.checkFlag("unlocked_"+u.getName()))
 					{
@@ -271,7 +271,8 @@
 
           //add upgrade entity sets
           game.addSet("UPGRADES")
-          game.getSet("UPGRADES").addEntity("BuildProduct", upgradeTemplate("Build a Product", "You're about to change the world.",[], {Money:100},{Money:0},"<yellow>You built a product.</yellow>"));
+          game.getSet("UPGRADES").addEntity("BuildProduct", upgradeTemplate("Build a Product", "You're about to change the world.",[], {Money:100},{Money:100},"You built a product."));
+          game.getSet("UPGRADES").addEntity("BuildLanding", DefaultUpgrade("Build Landing Page", "Everything needs a website.",["BuildProduct"], {Money:-1},{Money:100},"You built a landing page."));
 
           game.addSet("AVAILABLE_UPGRADES").addEntity(game.getSet("UPGRADES").getEntity("BuildProduct")).track("required_stats","#required_BuildProduct",displayRequiredStats);
 
@@ -301,6 +302,10 @@
               game.setAttribute("moneyPerSecond",mps);
           	}
         });
+
+        //Timer-based events
+        game.addTimer(processUpgrades,{c:true,period:5});//process Upgrades every 5 seconds
+        game.addTimer(function() { log("Shoudln't you be working?");},{c:false,period:100});
 
         //Start the game with story line 1
         log("You're bored at work.'");
