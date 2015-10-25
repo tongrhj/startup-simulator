@@ -10,12 +10,17 @@
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+    <!--Slick Carousel-->
+    <link rel="stylesheet" type="text/css" href="http://cdn.jsdelivr.net/jquery.slick/1.5.7/slick.css"/>
+
   </head>
 
   <style>
     body {
       padding-top: 20px;
       padding-bottom: 20px;
+      background-color: #f7f5f4;
     }
 
     /* Set max width of container to 730px */
@@ -35,22 +40,41 @@
     /*Align subtext subtitle with header h1 */
     .header h1 small {vertical-align: middle;}
 
-    .jumbotron {
-      color:#fff;
-      background: #354458;
-      padding-left:15px;
-      padding-right:15px;
+    #statsDisplay {
+      background-color: white;
+      text-align: center;
+      font-size: 30px;
     }
 
-    /* Change jumbotrons default link style */
-    .jumbotron p a {
-      color:#eb7260;
-      transition: all 0.2s;
+    #moneyDisplay, #userDisplay, #happyDisplay {
+      font-size:50px;
+      font-weight: bold;
     }
-    .jumbotron p a:hover  {
-      color: #fff;
-      text-decoration: none;
-      border-bottom: 1px solid #eb7260;
+
+    #log {
+      background-color: white;
+      padding:10px 15px;
+    }
+
+    #tabs ul {
+      list-style: none;
+      clear:both;
+    }
+
+    #tabs ul li {
+      display:block;
+      padding:5px 10px;
+      float:left;
+    }
+
+    /*Team Tab*/
+    #tabs-1 {
+      background-color:#f9b236;
+    }
+
+    /*Product Tab*/
+    #tabs-2 {
+      background-color:#d736f9;
     }
 
     /* Create a footer! */
@@ -65,43 +89,89 @@
     <body>
       <div class="container">
         <div class="header clearfix">
-          <h1>The Startup Simulator <small>by Jared Tong</small></h1>
+          <!--<h1>The Startup Simulator <small>by Jared Tong</small></h1>-->
         </div>
+
+        <div class="row" id="statsDisplay">
+          <div class="col-md-4 col-sm-4 col-xs-4">
+            <table>
+              <tr>
+                <td id="moneyDisplay">0</td>
+              </tr>
+              <tr>
+                <td>$</td>
+              </tr>
+            </table>
+          </div>
+          <div class="col-md-4 col-sm-4 col-xs-4">
+            <table>
+              <tr>
+                <td id="userDisplay">1</td>
+              </tr>
+              <tr>
+                <td>USERS</td>
+              </tr>
+            </table>
+          </div>
+          <div class="col-md-4 col-sm-4 col-xs-4">
+            <table>
+              <tr>
+                <td id="happyDisplay">0</td>
+              </tr>
+              <tr>
+                <td>TEAM :)</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+
         <div class="panel panel-default">
-          <div class="panel-heading"><h2>Timeline</h2></div>
+          <!--<div class="panel-heading"><h2>Timeline</h2></div>-->
           <div id="log"></div>
         </div>
-        <div class="jumbotron">
-          <h1>Your Stats</h1>
-          <table>
-      			<tr>
-      				<td>Money in bank:</td>
-      				<td id="moneyDisplay">0</td>
-      	    </tr>
-            <tr>
-      				<td>Users:</td>
-      				<td id="userDisplay">0</td>
-      	    </tr>
-          </table>
-        </div>
-        <div class="panel panel-default">
-          <div class="panel-heading"><h2>Admin Dashboard</h2></div>
-          <div id="clickContainer">
-            <button id="addmoneyBtn" class="btn btn-primary">CLICK ME</button>
-            <button id="addusersBtn" class="btn btn-danger">Users cost $2</button>
+
+        <div id="tabs">
+          <ul>
+            <li><a href="#tabs-1">TEAM</a></li>
+            <li><a href="#tabs-2">PRODUCT</a></li>
+            <li><a href="#tabs-3">GROWTH</a></li>
+            <li><a href="#tabs-4">BIZ</a></li>
+          </ul>
+          <div id="tabs-1">
+            <div class="slider multiple-items" id="upgrades_list">
+            </div>
           </div>
-          <ul id="upgrades_list"></ul>
+          <div id="tabs-2">
+            <div class="slider multiple-items" id="product_list">
+              <div id="clickContainer">
+                <button id="addmoneyBtn" class="btn btn-primary">Raise $</button>
+              </div>
+              <div><p>Product 2</p></div> 
+              <div><p>Product 3</p></div> 
+            </div>
+          </div>
+          <div id="tabs-3">
+            <p>Tab 3</p>
+          </div>
+          <div id="tabs-4">
+            <p>Tab 4</p>
+          </div>
         </div>
+
         <div class="footer">
-          Copyright <img src="dinosaur.svg" alt="dinosaur icon" width="30px" height="30px"> Dinosaurs Are Awesome 2015, <em>Singapore</em>
+          Made by Jared <img src="dinosaur.svg" alt="dinosaur icon" width="30px" height="30px">
         </div>
 	  </div> <!-- End of container div-->
 
     <!-- SCRIPTS -->
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
     <!-- Bootstrap Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <!-- Slick Carousel-->
+    <script type="text/javascript" src="http://cdn.jsdelivr.net/jquery.slick/1.5.7/slick.min.js"></script>
+
     <!-- Game Engine -->
     <!-- IncrementalJS Framework Game Engine -->
     <script src="js/incrementalObject.js"></script>
@@ -109,8 +179,21 @@
       //Variable Declarations and initializations
       var game;
 
+      //init Slick carousel
+      $('.multiple-items').slick({
+        infinite: true,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        centerMode: true
+      });
+
+      //init jQuery Tabs
+      $(function() {
+        $("#tabs").tabs();
+      });
+
       //create the object template for Upgrades
-      function upgradeTemplate(name,description,required,effects,required_stats,log_text) //effects -> effect_on : effect_value ...eg. health: +50 ..etc -> affects ALL camp participants for simplicity
+      function upgradeTemplate(name,description,required,effects,required_stats,log_text) //effects -> effect_on : effect_value ...eg. health: +50 ..etc
       {
         //additionally -> all effects values are added at the beginning of each day
         //required is an array -> stores names of upgrades required so far to build this
@@ -145,11 +228,13 @@
 					var req_stats=u.getAttribute("required_stats");
 					var req_text=displayRequiredStats(req_stats);
 
-					x="<li id='"+u.getName()+"_up'><button class='upgrade_button' id='"+u.getName()+"_upgrade'>"+u.getAttribute("name")+"</button><br><i>"+u.getAttribute("description")+"</i><br><sup><b>Count:</b> <i id='count_"+u.getName()+"_upgrade'>"+u.getAttribute("count")+"</i><br><b>Required:</b> <i id='required_"+u.getName()+"'>"+req_text+"</i><br>"+eftext+"</sup></li>";
+					x="<div id='"+u.getName()+"_up'><button class='upgrade_button' id='"+u.getName()+"_upgrade'>"+u.getAttribute("name")+"</button><br><i>"+u.getAttribute("description")+"</i><br><sup><b>Count:</b> <i id='count_"+u.getName()+"_upgrade'>"+u.getAttribute("count")+"</i><br><b>Required:</b> <i id='required_"+u.getName()+"'>"+req_text+"</i><br>"+eftext+"</sup></div>";
 
 					if (!game.checkFlag("unlocked_"+u.getName()))
 					{
-						$("#upgrades_list").prepend(x);//add the element only once into the list
+            //slideIndex++;
+            $('#upgrades_list').slick('slickAdd',x);
+						//$("#upgrades_list").prepend(x);//add the element only once into the list
 						u.track("count","#count_"+u.getName()+"_upgrade");//track the count
 						u.track("required_stats","#required_"+u.getName(),displayRequiredStats);//track the required stat changes
 						game.addFlag("unlocked_"+u.getName());
@@ -231,7 +316,7 @@
           var e=g[j];
           if (e.getAttribute("stop"))
           {
-            console.log("^----->Continued");
+            console.log("^----->Stop");
             continue;
           };
           if (e.getAttribute("count")<=0)
@@ -265,16 +350,21 @@
 
         	//add attributes
         	game.addAttribute("Money",1000).track("Money","#moneyDisplay", function(value) { return value.toFixed(0); });
+          game.addAttribute("teamHappy",100).track("teamHappy","#happyDisplay", function(value) { return value.toFixed(0); });
           game.addAttribute("moneyPerSecond",0.1);
           game.addAttribute("day",1);
 
 
           //add upgrade entity sets
-          game.addSet("UPGRADES")
-          game.getSet("UPGRADES").addEntity("BuildProduct", upgradeTemplate("Build a Product", "You're about to change the world.",[], {Money:-20},{Money:100},"You built a product."));
-          game.getSet("UPGRADES").addEntity("BuildLanding", upgradeTemplate("Build Landing Page", "Everything needs a website.",["BuildProduct"], {Money:-10},{Money:100},"You built a landing page."));
 
-          game.addSet("AVAILABLE_UPGRADES").addEntity(game.getSet("UPGRADES").getEntity("BuildProduct")).track("required_stats","#required_BuildProduct",displayRequiredStats);
+          //Upgrade entity set: Employee Perks
+          game.addSet("UPGRADES")
+          game.getSet("UPGRADES").addEntity("Beanbags", upgradeTemplate("Beanbags", "The throne of change makers",[], {teamHappy:10},{Money:100},"Your team love looking at the beanbags while they work."))
+          game.getSet("UPGRADES").addEntity("Pinball", upgradeTemplate("Pinball", "The retro game of champions",[], {Money:0.1},{Money:500},"Ca-ching! You make 10 cents per play from pinball."));
+          game.getSet("UPGRADES").addEntity("TShirts", upgradeTemplate("TShirts", "The conversation starter you wear",["Beanbags"], {teamHappy:10},{Money:500},"Now that people know where you work, they respect you."));
+          game.getSet("UPGRADES").addEntity("Stickers", upgradeTemplate("Stickers", "How will anyone hear of your startup otherwise?",["Beanbags"], {teamHappy:10},{Money:200},"Your team's Macbooks now advertise one more brand."));
+          
+          game.addSet("AVAILABLE_UPGRADES").addEntity(game.getSet("UPGRADES").getEntity("Beanbags")).track("required_stats","#required_Beanbags",displayRequiredStats);
 
           //Create one object to hold all my variables to avoid polluting global namespace
           game.log_array=[];
@@ -305,10 +395,17 @@
 
         //Timer-based events
         game.addTimer(processUpgrades,{c:true,period:5});//process Upgrades every 5 seconds
-        game.addTimer(function() { log("Shoudln't you be working?");},{c:false,period:100});
+        game.addTimer(function() {log("Shouldn't you be working?");},{c:false,period:100});
+        game.addTimer(function() {log("I really think there's an email you could be reading.");},{c:false,period:200});
+        game.addTimer(function() {log("You could have written that report by now.");},{c:false,period:300});
+        game.addTimer(function() {log("Well, you were thinking about changing jobs anyway.");},{c:false,period:360});
+        game.addTimer(function() {log("I think your phone just vibrated.");},{c:false,period:420});
+        game.addTimer(function() {log("I'm pretty sure your phone just got a notification.");},{c:false,period:460});
+        game.addTimer(function() {log("Check again.");},{c:false,period:480});
+        game.addTimer(function() {log("Gotcha");},{c:false,period:520});
 
         //Start the game with story line 1
-        log("You're bored at work.'");
+        log("You're bored at work.");
 
         }
 
@@ -334,14 +431,6 @@
 					text+=game.log_array[j];
 				}
 				$("#log").html(text);
-				//update upwards
-//				var s=document.getElementById("log");
-
-//				s.innerHTML="<dark>[Day "+day+"]</dark> "+text+"<hr>"+s.innerHTML;
-
-				//--The following javascript code updates downwards
-					//document.getElementById("log").innerHTML+="<br>"+document.getElementById("log").scrollHeight;
-					//document.getElementById("log").scrollTop=document.getElementById("log").scrollHeight;
 			}
 
       //the gameCode() function contains essential game code
@@ -389,7 +478,9 @@
 
       $(document).ready(function() {
 				init(); //run initialization code
-			});
+      });
+
+
     </script>
   </body>
 </html>
