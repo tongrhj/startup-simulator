@@ -6,13 +6,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>The Startup Simulator Game</title>
+    <title>startup simulator | game by Jared Tong</title>
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
-    <!--Slick Carousel-->
-    <link rel="stylesheet" type="text/css" href="http://cdn.jsdelivr.net/jquery.slick/1.5.7/slick.css"/>
+    <!--Source Pro Redmart Font-->
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,300' rel='stylesheet' type='text/css'>
 
   </head>
 
@@ -21,7 +21,10 @@
       padding-top: 20px;
       padding-bottom: 20px;
       background-color: #f7f5f4;
+      font-family: 'Source Sans Pro',sans-serif;
     }
+
+    .container {margin-top:57px;}
 
     /* Set max width of container to 730px */
     @media (min-width: 768px) {
@@ -32,23 +35,43 @@
 
     /* Add space between header and jumbotron */
     .header {
-      margin-bottom: 30px;
+      background-color:#f9b236;
+      border-bottom: 1px solid #e99c15;
+      color:white;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 9000;
+      -webkit-transition: -webkit-transform .25s ease;
+      -moz-transition: -moz-transform .25s ease;
+      -o-transition: -o-transform .25s ease;
+      -ms-transition: -ms-transform .25s ease;
+      transition: transform .25s ease;
+      margin:0;
+      clear: both;
     }
 
-    /*Remove bootstrap's default margins for header h1 */
-    .header h1 {margin:0px;line-height:40px;}
-    /*Align subtext subtitle with header h1 */
-    .header h1 small {vertical-align: middle;}
+    .header h1 {margin:0px;line-height:40px;font-size: medium;text-align: center;}
 
     #statsDisplay {
-      background-color: white;
       text-align: center;
-      font-size: 30px;
+      font-size: 24px;
+      color:#adadad;
+      margin-bottom:40px;
+    }
+
+    #statsDisplay table {
+      width:100%;
+      font-weight:700;
     }
 
     #moneyDisplay, #userDisplay, #happyDisplay {
-      font-size:50px;
-      font-weight: bold;
+      font-size:40px;
+    }
+
+    .panel-default {
+      margin-top:20px;
     }
 
     #log {
@@ -67,6 +90,19 @@
       float:left;
     }
 
+    .nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active>a:hover {
+      background-color: #adadad;
+    }
+
+    .upgradeCard {
+      min-width:185px;
+    }
+
+    .upgradeCard img {
+      width: 150px;
+      height: 150px;
+    }
+
     /*Team Tab*/
     #tabs-1 {
       background-color:#f9b236;
@@ -82,15 +118,16 @@
       padding-top: 19px;
       color: #777;
       border-top: 1px solid #e5e5e5;
+      clear:both;
     }
 
     </style>
 
     <body>
+      <div class="header clearfix">
+        <h1>startup simulator</h1>
+      </div>
       <div class="container">
-        <div class="header clearfix">
-          <!--<h1>The Startup Simulator <small>by Jared Tong</small></h1>-->
-        </div>
 
         <div class="row" id="statsDisplay">
           <div class="col-md-4 col-sm-4 col-xs-4">
@@ -130,32 +167,35 @@
           <div id="log"></div>
         </div>
 
-        <div id="tabs">
-          <ul>
-            <li><a href="#tabs-1">TEAM</a></li>
-            <li><a href="#tabs-2">PRODUCT</a></li>
-            <li><a href="#tabs-3">GROWTH</a></li>
-            <li><a href="#tabs-4">BIZ</a></li>
+        <div>
+          <ul class="nav nav-pills nav-justified">
+            <li class="active"><a data-toggle="tab" href="#team">TEAM</a></li>
+            <li><a data-toggle="tab" href="#product">PRODUCT</a></li>
+            <li><a data-toggle="tab" href="#growth">GROWTH</a></li>
+            <li><a data-toggle="tab" href="#biz">BIZ</a></li>
           </ul>
-          <div id="tabs-1">
-            <div class="slider multiple-items" id="upgrades_list">
-            </div>
-          </div>
-          <div id="tabs-2">
-            <div class="slider multiple-items" id="product_list">
-              <div id="clickContainer">
-                <button id="addmoneyBtn" class="btn btn-primary">Raise $</button>
+          <div class="tab-content">
+            <div id="team" class="tab-pane fade in active">
+              <div id="upgrades_list">
+                <div class="clearfix visible-xs"></div>
               </div>
-              <div><p>Product 2</p></div> 
-              <div><p>Product 3</p></div> 
             </div>
-          </div>
-          <div id="tabs-3">
-            <p>Tab 3</p>
-          </div>
-          <div id="tabs-4">
-            <p>Tab 4</p>
-          </div>
+            <div id="product" class="tab-pane fade">
+              <div id="product_list">
+                <div id="clickContainer">
+                  <button id="addmoneyBtn" class="btn btn-primary">Raise $</button>
+                </div>
+                <div><p>Product 2</p></div> 
+                <div><p>Product 3</p></div> 
+              </div>
+            </div>
+            <div id="growth" class="tab-pane fade">
+              <p>Tab 3</p>
+            </div>
+            <div id="biz" class="tab-pane fade">
+              <p>Tab 4</p>
+            </div>
+          </div><!--End of tab content-->
         </div>
 
         <div class="footer">
@@ -169,8 +209,6 @@
     <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
     <!-- Bootstrap Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-    <!-- Slick Carousel-->
-    <script type="text/javascript" src="http://cdn.jsdelivr.net/jquery.slick/1.5.7/slick.min.js"></script>
 
     <!-- Game Engine -->
     <!-- IncrementalJS Framework Game Engine -->
@@ -178,14 +216,6 @@
     <script>
       //Variable Declarations and initializations
       var game;
-
-      //init Slick carousel
-      $('.multiple-items').slick({
-        infinite: true,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        centerMode: true
-      });
 
       //init jQuery Tabs
       $(function() {
@@ -228,13 +258,11 @@
 					var req_stats=u.getAttribute("required_stats");
 					var req_text=displayRequiredStats(req_stats);
 
-					x="<div id='"+u.getName()+"_up'><button class='upgrade_button' id='"+u.getName()+"_upgrade'>"+u.getAttribute("name")+"</button><br><i>"+u.getAttribute("description")+"</i><br><sup><b>Count:</b> <i id='count_"+u.getName()+"_upgrade'>"+u.getAttribute("count")+"</i><br><b>Required:</b> <i id='required_"+u.getName()+"'>"+req_text+"</i><br>"+eftext+"</sup></div>";
+					x="<div class='panel panel-default upgradeCard' id='"+u.getName()+"_up'><div class='panel-body'><img src='images/upgrade-"+u.getName()+".png'><br>"+u.getAttribute("name")+" - <i>"+u.getAttribute("description")+"</i><br><b>Required:</b><i id='required_"+u.getName()+"'>"+req_text+"</i><br>"+eftext+"</div><div class='panel-footer'><button class='btn btn-warning upgrade_button' id='"+u.getName()+"_upgrade'>BUY</button></div></div>";
 
 					if (!game.checkFlag("unlocked_"+u.getName()))
 					{
-            //slideIndex++;
-            $('#upgrades_list').slick('slickAdd',x);
-						//$("#upgrades_list").prepend(x);//add the element only once into the list
+						$("#upgrades_list").prepend(x);//add the element only once into the list
 						u.track("count","#count_"+u.getName()+"_upgrade");//track the count
 						u.track("required_stats","#required_"+u.getName(),displayRequiredStats);//track the required stat changes
 						game.addFlag("unlocked_"+u.getName());
@@ -289,7 +317,7 @@
           log(g.getAttribute("log_text"));//log its action text
 
           //change its style so that the user knows it's unlocked
-          $("#"+g.getName()+"_upgrade").css({"background-color":"#0af"});
+          $("#"+g.getName()+"_upgrade").removeClass("btn-warning").addClass("btn-success").html('Owned '+g.getAttribute('count'));
 
           keys=Object.keys(req_stats);
 
@@ -473,6 +501,12 @@
         g["Money"]+=g["moneyPerSecond"]/game.getFPS();
 
         displayUpgrades();
+
+        //enables tabs
+        $('.nav-tabs a').on('shown.bs.tab', function(event){
+            var x = $(event.target).text();         // active tab
+            var y = $(event.relatedTarget).text();  // previous tab
+        });
 
       }; // End of gameCode
 
