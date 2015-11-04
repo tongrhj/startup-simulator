@@ -94,8 +94,15 @@
       background-color: #adadad;
     }
 
+    /* Upgrade Tab*/
+    #upgrades_list {
+      display: flex;
+
+    }
+
     .upgradeCard {
       min-width:185px;
+      margin: 10px;
     }
 
     .upgradeCard img {
@@ -185,8 +192,8 @@
                 <div id="clickContainer">
                   <button id="addmoneyBtn" class="btn btn-primary">Raise $</button>
                 </div>
-                <div><p>Product 2</p></div> 
-                <div><p>Product 3</p></div> 
+                <div><p>Product 2</p></div>
+                <div><p>Product 3</p></div>
               </div>
             </div>
             <div id="growth" class="tab-pane fade">
@@ -391,7 +398,7 @@
           game.getSet("UPGRADES").addEntity("Pinball", upgradeTemplate("Pinball", "The retro game of champions",[], {Money:0.1},{Money:500},"Ca-ching! You make 10 cents per play from pinball."));
           game.getSet("UPGRADES").addEntity("TShirts", upgradeTemplate("TShirts", "The conversation starter you wear",["Beanbags"], {teamHappy:10},{Money:500},"Now that people know where you work, they respect you."));
           game.getSet("UPGRADES").addEntity("Stickers", upgradeTemplate("Stickers", "How will anyone hear of your startup otherwise?",["Beanbags"], {teamHappy:10},{Money:200},"Your team's Macbooks now advertise one more brand."));
-          
+
           game.addSet("AVAILABLE_UPGRADES").addEntity(game.getSet("UPGRADES").getEntity("Beanbags")).track("required_stats","#required_Beanbags",displayRequiredStats);
 
           //Create one object to hold all my variables to avoid polluting global namespace
